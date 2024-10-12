@@ -1,0 +1,29 @@
+{
+    "mode":"debug",
+    "service_name":"post-service",
+    "http_port": 5001,
+    "jwt_secret": "H656H6KH56K46KK4644654Y65YI6Y5Y",
+
+    "db": {
+          "host": "127.0.0.1",
+          "port": 5432,
+          "name": "post-service",
+          "userr": "postgres",
+          "user": "root",
+          "pass": "admin",
+          "max_idle_time_in_minute": 60,
+          "enable_ssl_mode": false
+      },
+      "migrations":"migrations",
+      "mongodb":{
+        "host":"192.168.1.110",
+        "port": 27017,
+        "name":"post-service",
+        "user":"root",
+        "pass":"admin",
+        "max_idle_time_in_minute": 60,
+        "enable_ssl_mode": false
+      }
+      
+
+}
