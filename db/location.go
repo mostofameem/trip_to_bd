@@ -3,6 +3,7 @@ package db
 import (
 	"database/sql"
 	"post-service/config"
+	"sync"
 	"time"
 )
 
@@ -11,12 +12,20 @@ type LocationTypeRepo struct {
 	table string
 }
 
+var locationTypeRepo *LocationTypeRepo
+
+var locationCntOnce = sync.Once{}
+
 func NewLocationTypeRepo(cnf *config.DBConfig) *LocationTypeRepo {
 	db := NewDB(cnf)
-	return &LocationTypeRepo{
-		db:    db,
-		table: "locations",
-	}
+
+	locationCntOnce.Do(func() {
+		locationTypeRepo = &LocationTypeRepo{
+			db:    db,
+			table: "locations",
+		}
+	})
+	return locationTypeRepo
 }
 
 type Location struct {

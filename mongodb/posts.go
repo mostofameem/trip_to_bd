@@ -2,6 +2,7 @@ package mongodb
 
 import (
 	"post-service/config"
+	"sync"
 
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -13,10 +14,18 @@ type LocationTypeRepo struct {
 
 const locationCollectionName = "locations"
 
+var locationTypeRepo *LocationTypeRepo
+
+var locationCntOnce = sync.Once{}
+
 func NewLocationTypeRepo(cnf *config.MongoDBConfig) *LocationTypeRepo {
-	mongodb := NewMongoDB(cnf)
-	return &LocationTypeRepo{
-		schema:     "posts",
-		collection: mongodb.Database.Collection(locationCollectionName),
-	}
+	locationCntOnce.Do(func() {
+		mongodb := NewMongoDB(cnf)
+
+		locationTypeRepo = &LocationTypeRepo{
+			schema:     "posts",
+			collection: mongodb.Database.Collection(locationCollectionName),
+		}
+	})
+	return locationTypeRepo
 }

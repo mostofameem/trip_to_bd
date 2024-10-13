@@ -4,6 +4,7 @@ import (
 	"log/slog"
 	"os"
 	"post-service/config"
+	"sync"
 
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -13,22 +14,25 @@ type MongoDB struct {
 	Database *mongo.Database
 }
 
-func NewMongoDB(mongoCnf *config.MongoDBConfig) *MongoDB {
-	mongoDb := Connet(mongoCnf)
+var cntOnce = sync.Once{}
 
-	return &MongoDB{
-		Client:   mongoDb.Client,
-		Database: mongoDb.Database,
-	}
+var mongoDb *MongoDB
+
+func NewMongoDB(mongoCnf *config.MongoDBConfig) *MongoDB {
+	cntOnce.Do(func() {
+		mongoDb = Connet(mongoCnf)
+	})
+
+	return mongoDb
 }
 
 func Connet(mongoCnf *config.MongoDBConfig) *MongoDB {
-
 	mongoDB := connect(mongoCnf)
 	if mongoDB == nil {
 		slog.Error("MongoDb Connection is nil")
 		os.Exit(1)
 	}
+
 	slog.Info("Connected to Mongo Database")
 	return mongoDB
 }
