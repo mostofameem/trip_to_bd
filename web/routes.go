@@ -23,7 +23,7 @@ func (server *Server) initRoutes(mux *http.ServeMux, manager *middlewares.Manage
 	mux.Handle(
 		"GET /get-locations",
 		manager.With(
-			http.HandlerFunc(server.handlers.GetLocations),
+			http.HandlerFunc(server.handlers.GetLocation),
 		),
 	)
 }

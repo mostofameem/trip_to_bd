@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"log/slog"
 	"net/http"
 	"post-service/location"
@@ -27,7 +28,7 @@ func (handlers *Handlers) AddLocation(w http.ResponseWriter, r *http.Request) {
 
 	err = utils.Validate(locationReq)
 	if err != nil {
-		utils.SendError(w, http.StatusBadRequest, err)
+		utils.SendError(w, http.StatusBadRequest, fmt.Errorf("invaild request body"))
 		return
 	}
 	err = handlers.locSvc.AddLocation(r.Context(), &location.Location{

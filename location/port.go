@@ -7,5 +7,5 @@ import (
 
 type Service interface {
 	AddLocation(ctx context.Context, location *Location) error
-	GetLocations(ctx context.Context) (*[]mongodb.Location, error)
+	GetLocation(ctx context.Context, title string) (*mongodb.Location, error)
 }

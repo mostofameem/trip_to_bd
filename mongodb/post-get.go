@@ -7,20 +7,24 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-func (repo *LocationTypeRepo) GetLocations(ctx context.Context) (*[]Location, error) {
-	data, err := repo.collection.Find(ctx, bson.D{})
-	if err != nil {
-		slog.Error("Failed to get locations")
+func (repo *LocationTypeRepo) GetLocation(ctx context.Context, locationId int) (*Location, error) {
+	
+	searchTerm := GetKey(locationId)
+
+	filter := bson.M{"_id": searchTerm}
+
+	data := repo.collection.FindOne(ctx, filter)
+	if err := data.Err(); err != nil {
+		slog.Error("Failed to get location", "error", err)
 		return nil, err
 	}
-	defer data.Close(ctx)
 
-	var locations []Location
-	if err = data.All(ctx, &locations); err != nil {
-		slog.Error("Failed to struct locations")
+	var location Location
+	if err := data.Decode(&location); err != nil {
+		slog.Error("Failed to decode location", "error", err)
 		return nil, err
 	}
 
 	slog.Info("Data retrieved successfully")
-	return &locations, nil
+	return &location, nil
 }
