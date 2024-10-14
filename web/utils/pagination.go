@@ -1,18 +1,21 @@
 package utils
 
 import (
+	"log"
 	"math"
-	"net/http"
 	"strconv"
+
+	"net/http"
 )
 
 type FilterParams map[string]any
+
 type PaginationParams struct {
 	Page      int
 	Limit     int
 	SortBy    string
 	SortOrder string
-	Filter    FilterParams
+	Filters   FilterParams
 }
 
 const (
@@ -37,16 +40,47 @@ func parseLimit(r *http.Request) int {
 	return int(limit)
 }
 
-func countTotalPages(limit, totalItems int) int {
+func CountTotalPages(limit, totalItems int) int {
 	return int(math.Ceil(float64(totalItems) / math.Max(1.0, float64(limit))))
 }
 
-// func GetPaginationParams(r *http.Request , defaultSortBy, defaultSortOrder string)PaginationParams{
-// 	params:=PaginationParams{
-// 		Page: 0,
-// 		Limit: 10,
-// 		SortBy: defaultSortBy,
-// 		SortOrder: defaultSortOrder,
+func GetPaginationParams(r *http.Request, defaultSortBy, defaultSortOrder string) PaginationParams {
+	params := PaginationParams{
+		Page:      0,
+		Limit:     10,
+		SortBy:    defaultSortBy,
+		SortOrder: defaultSortOrder,
+		Filters:   FilterParams{},
+	}
 
-// 	}
-// }
+	for k, v := range r.URL.Query() {
+		log.Println(k, " ", v)
+		switch k {
+		case pageKey:
+			// parse page number
+			params.Page = parsePage(r)
+
+		case limitKey:
+			// parse limit
+			params.Limit = parseLimit(r)
+
+		case sortByKey:
+			// parse sort by
+			params.SortBy = r.URL.Query().Get(sortByKey)
+
+		case sortOrderKey:
+			// parse sort order
+			params.SortOrder = r.URL.Query().Get(sortOrderKey)
+
+		default:
+			// any other filter parameter
+			params.Filters[k] = v
+		}
+	}
+	return params
+}
+
+func GetSortingData(r *http.Request, defaultSortBy, defaultSortOrder string) (sortBy, sortOrder string) {
+	params := GetPaginationParams(r, defaultSortBy, defaultSortOrder)
+	return params.SortBy, params.SortOrder
+}

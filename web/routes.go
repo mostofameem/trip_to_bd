@@ -21,9 +21,16 @@ func (server *Server) initRoutes(mux *http.ServeMux, manager *middlewares.Manage
 	)
 
 	mux.Handle(
-		"GET /get-locations",
+		"GET /get-location",
 		manager.With(
 			http.HandlerFunc(server.handlers.GetLocation),
+		),
+	)
+
+	mux.Handle(
+		"GET /get-locations",
+		manager.With(
+			http.HandlerFunc(server.handlers.GetLocations),
 		),
 	)
 }

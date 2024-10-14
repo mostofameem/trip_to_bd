@@ -8,9 +8,11 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"post-service/config"
+	"post-service/db"
 	"post-service/location"
 	"post-service/mongodb"
 	"post-service/web/handlers"
+	"post-service/web/utils"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -37,6 +39,12 @@ func (m *MockLocationService) GetLocation(ctx context.Context, title string) (*m
 	locations := args.Get(0).(*mongodb.Location) // Cast the first returned value to *[]mongodb.Location
 	err := args.Error(1)                         // Get the second returned value as an error
 	return locations, err
+}
+func (m *MockLocationService) GetLocations(ctx context.Context, params utils.PaginationParams) (*[]db.Location, error) {
+    args := m.Called(ctx, params)
+    locations := args.Get(0).(*[]db.Location)  // Adjust this to *[]
+    err := args.Error(1)
+    return locations, err
 }
 
 func TestAddLocation_TableDriven(t *testing.T) {
