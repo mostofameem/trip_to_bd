@@ -41,10 +41,15 @@ func (m *MockLocationService) GetLocation(ctx context.Context, title string) (*m
 	return locations, err
 }
 func (m *MockLocationService) GetLocations(ctx context.Context, params utils.PaginationParams) (*[]db.Location, error) {
-    args := m.Called(ctx, params)
-    locations := args.Get(0).(*[]db.Location)  // Adjust this to *[]
-    err := args.Error(1)
-    return locations, err
+	args := m.Called(ctx, params)
+	locations := args.Get(0).(*[]db.Location) // Adjust this to *[]
+	err := args.Error(1)
+	return locations, err
+}
+func (m *MockLocationService) AddComment(ctx context.Context, locationId int, cmnt location.Comment) error {
+	args := m.Called(ctx, locationId, cmnt)
+	err := args.Error(0)
+	return err
 }
 
 func TestAddLocation_TableDriven(t *testing.T) {

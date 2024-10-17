@@ -11,4 +11,5 @@ type Service interface {
 	AddLocation(ctx context.Context, location *Location) error
 	GetLocation(ctx context.Context, title string) (*mongodb.Location, error)
 	GetLocations(ctx context.Context, filter utils.PaginationParams) (*[]db.Location, error)
+	AddComment(ctx context.Context, locationId int, cmnt Comment) error
 }
