@@ -17,9 +17,9 @@ var locationTypeRepo *LocationTypeRepo
 var locationCntOnce = sync.Once{}
 
 func NewLocationTypeRepo(cnf *config.DBConfig) *LocationTypeRepo {
-	db := NewDB(cnf)
 
 	locationCntOnce.Do(func() {
+		db := NewDB(cnf)
 		locationTypeRepo = &LocationTypeRepo{
 			db:    db,
 			table: "locations",

@@ -14,9 +14,10 @@ type Comment struct {
 	Content    string
 	Created_at time.Time
 	Updated_at time.Time
+	Vote       int
 }
 
-func (repo *LocationTypeRepo) AddComment(ctx context.Context, locationId int, cmnt Comment) error {
+func (repo *LocationTypeRepo) AddReviews(ctx context.Context, locationId int, cmnt Comment) error {
 	postKey := GetKey(locationId)
 
 	filter := bson.M{"_id": postKey}
@@ -32,5 +33,24 @@ func (repo *LocationTypeRepo) AddComment(ctx context.Context, locationId int, cm
 	}
 
 	slog.Info("Comment added successfully")
+	return nil
+}
+
+func (repo *LocationTypeRepo) AddLike(ctx context.Context, locationId int, cmntId Comment) error {
+	postKey := GetKey(locationId)
+
+	filter := bson.M{"_id": postKey, "comments._id": cmntId.Userid}
+
+	update := bson.M{
+		"$push": bson.M{"comments": cmntId},
+		"$inc":  bson.M{"comments.$.vote": 1},
+	}
+
+	_, err := repo.collection.UpdateOne(ctx, filter, update)
+	if err != nil {
+		return err
+	}
+
+	slog.Info("Comment added and vote incremented successfully")
 	return nil
 }

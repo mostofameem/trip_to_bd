@@ -15,6 +15,10 @@ type DBConfig struct {
 	MaxIdleTimeInMinute int    `json:"max_idle_time_in_minute" validate:"required"`
 	EnableSSLMode       bool   `json:"enable_ssl_mode"`
 }
+type GrpcUrlsConfig struct {
+	UserUrl    string `json:"user" validate:"required"`
+	Restaurant string `json:"restaurant" validate:"required"`
+}
 
 type MongoDBConfig struct {
 	Host                string `json:"host" validate:"required"`
@@ -30,12 +34,13 @@ const DebugMode = Mode("debug")
 const ReleaseMode = Mode("release")
 
 type Config struct {
-	Mode            Mode          `json:"mode"  validate:"required"`
-	ServiceName     string        `json:"service_name" validate:"required"`
-	HttpPort        int           `json:"http_port"  validate:"required"`
-	DB              DBConfig      `json:"db" validate:"required"`
-	MongoDB         MongoDBConfig `json:"mongodb" validate:"required"`
-	MigrationSource string        `json:"migrations" validate:"required"`
+	Mode            Mode           `json:"mode"  validate:"required"`
+	ServiceName     string         `json:"service_name" validate:"required"`
+	HttpPort        int            `json:"http_port"  validate:"required"`
+	DB              DBConfig       `json:"db" validate:"required"`
+	MongoDB         MongoDBConfig  `json:"mongodb" validate:"required"`
+	GrpcUrls        GrpcUrlsConfig `json:"grpc_urls"`
+	MigrationSource string         `json:"migrations" validate:"required"`
 }
 
 var config *Config
