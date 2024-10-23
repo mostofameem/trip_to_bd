@@ -1,15 +1,14 @@
 syntax = "proto3";
 
-import "google/protobuf/timestamp.proto";
 option go_package = "post-service/grpc/users";
 package users;
 
 service UserService {
-  rpc getUserName (GetUserNameReq) returns (GetUserNameRes) {}
+  rpc GetUserName (GetUserNameReq) returns (GetUserNameRes) {}
 }
 
 message GetUserNameReq {
-  string user_id = 1;
+  int32 user_id = 1;
 }
 
 message GetUserNameRes {

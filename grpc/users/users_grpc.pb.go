@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	UserService_GetUserName_FullMethodName = "/users.UserService/getUserName"
+	UserService_GetUserName_FullMethodName = "/users.UserService/GetUserName"
 )
 
 // UserServiceClient is the client API for UserService service.
@@ -112,7 +112,7 @@ var UserService_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*UserServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "getUserName",
+			MethodName: "GetUserName",
 			Handler:    _UserService_GetUserName_Handler,
 		},
 	},
