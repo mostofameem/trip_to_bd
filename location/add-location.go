@@ -4,6 +4,7 @@ import (
 	"context"
 	"log/slog"
 	"post-service/db"
+	"post-service/grpc/users"
 	"post-service/mongodb"
 	"time"
 )
@@ -20,7 +21,7 @@ type Location struct {
 	Isactive     bool      `db:"is_active"`
 }
 
-func (svc *service) AddLocation(ctx context.Context, locationReq *Location) error {
+func (svc *service) AddLocation(ctx context.Context, locationReq *Location, id int) error {
 	locationId, err := svc.dblocationTypeRepo.AddLocation(&db.Location{
 		Title:      locationReq.Title,
 		BestTime:   locationReq.BestTime,
@@ -31,12 +32,23 @@ func (svc *service) AddLocation(ctx context.Context, locationReq *Location) erro
 		return err
 	}
 
+	userInfo, err := svc.grpcUserClient.GetUserName(ctx, &users.GetUserNameReq{
+		UserId: int32(id),
+	})
+	if err != nil {
+		slog.Error("failed to get username from grpc")
+		return err
+	}
 	err = svc.mdblocationTypeRepo.AddLocation(&mongodb.Location{
 		ID:           locationId,
 		Title:        locationReq.Title,
 		Descriptions: locationReq.Descriptions,
 		BestTime:     locationReq.BestTime,
-		PictureUrl:   locationReq.PictureUrl,
+		Author: mongodb.Author{
+			UserID:   id,
+			Username: userInfo.Name,
+		},
+		PictureUrl: locationReq.PictureUrl,
 	})
 	if err != nil {
 		slog.Error(err.Error())

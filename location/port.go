@@ -8,8 +8,8 @@ import (
 )
 
 type Service interface {
-	AddLocation(ctx context.Context, location *Location) error
+	AddLocation(ctx context.Context, location *Location, id int) error
 	GetLocation(ctx context.Context, title string) (*mongodb.Location, error)
 	GetLocations(ctx context.Context, filter utils.PaginationParams) (*[]db.Location, error)
-	AddReviews(ctx context.Context, locationId int, cmnt Comment) error
+	AddReviews(ctx context.Context, locationId int, cmnt Comment, userId int) error
 }

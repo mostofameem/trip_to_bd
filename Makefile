@@ -5,6 +5,7 @@ SERVER_CMD:=./${TARGET}
 PROTOC_DEST:=./
 PROTOC_FLAGS:=--go_out=${PROTOC_DEST} --go_opt=paths=source_relative --go-grpc_out=${PROTOC_DEST} --go-grpc_opt=paths=source_relative
 USERS_PROTO_FILES:=./grpc/users/users.proto
-
+POSTS_PROTO_FILES:=./grpc/posts/posts.proto
 build-proto:
 	protoc ${PROTOC_FLAGS} ${USERS_PROTO_FILES}
+	protoc ${PROTOC_FLAGS} ${POSTS_PROTO_FILES}

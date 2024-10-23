@@ -33,4 +33,10 @@ func (server *Server) initRoutes(mux *http.ServeMux, manager *middlewares.Manage
 			http.HandlerFunc(server.handlers.GetLocations),
 		),
 	)
+	mux.Handle(
+		"GET /add-review",
+		manager.With(
+			http.HandlerFunc(server.handlers.AddReview),
+		),
+	)
 }

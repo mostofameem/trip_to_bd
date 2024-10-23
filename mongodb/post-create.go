@@ -24,7 +24,6 @@ type Location struct {
 	Rating       float32   `json:"rating" bson:"rating"`
 	Voted        int       `json:"voted" bson:"voted"`
 	Author       Author    `json:"author" bson:"author"`
-	ReviewIDs    []int     `json:"review_ids" bson:"review_ids"`
 	Comments     []Comment `json:"commenrs" bson:"comments"`
 	CreatedAt    time.Time `json:"created_at" bson:"created_at"`
 	UpdatedAt    time.Time `json:"updated_at" bson:"updated_at"`
@@ -34,7 +33,6 @@ func (repo *LocationTypeRepo) AddLocation(location *Location) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	location.ReviewIDs = append(location.ReviewIDs, 0)
 	mongoDoc, err := BsonM(location)
 	if err != nil {
 		slog.Error("Error converting struct to BSON", err)

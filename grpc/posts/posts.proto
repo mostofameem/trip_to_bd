@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option go_package= "posts-service/grpc/posts.proto";
+package posts;
+
+service PostService {
+    rpc getUserName(GetUserNameReq)returns(GetUserNameRes){} 
+}
+
+message GetUserNameReq {
+    int32 id=1; 
+}
+message GetUserNameRes {
+    bool status=1;
+    int32 id=2;
+    string name =3; 
+}

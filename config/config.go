@@ -34,13 +34,15 @@ const DebugMode = Mode("debug")
 const ReleaseMode = Mode("release")
 
 type Config struct {
-	Mode            Mode           `json:"mode"  validate:"required"`
-	ServiceName     string         `json:"service_name" validate:"required"`
-	HttpPort        int            `json:"http_port"  validate:"required"`
-	DB              DBConfig       `json:"db" validate:"required"`
-	MongoDB         MongoDBConfig  `json:"mongodb" validate:"required"`
-	GrpcUrls        GrpcUrlsConfig `json:"grpc_urls"`
-	MigrationSource string         `json:"migrations" validate:"required"`
+	Mode                   Mode           `json:"mode"  validate:"required"`
+	ServiceName            string         `json:"service_name" validate:"required"`
+	HttpPort               int            `json:"http_port"  validate:"required"`
+	GrpcPort               int            `json:"grpc_port" validate:"required"`
+	DB                     DBConfig       `json:"db" validate:"required"`
+	MongoDB                MongoDBConfig  `json:"mongodb" validate:"required"`
+	GrpcUrls               GrpcUrlsConfig `json:"grpc_urls"`
+	MigrationSource        string         `json:"migrations" validate:"required"`
+	GrpcReqTimeOutInSecond int            `json:"grpc_req_timeout_in_second" validate:"required"`
 }
 
 var config *Config

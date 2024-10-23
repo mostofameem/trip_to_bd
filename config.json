@@ -2,6 +2,7 @@
     "mode":"debug",
     "service_name":"post-service",
     "http_port": 5001,
+    "grpc_port":3345,
     "jwt_secret": "H656H6KH56K46KK4644654Y65YI6Y5Y",
 
     "db": {
@@ -25,7 +26,7 @@
         "enable_ssl_mode": false
       },
       "grpc_urls":{
-        "user":"localhost:3000",
+        "user":"192.168.1.110:3345",
         "restaurant":"localhost:4000"
       },
       "grpc_req_timeout_in_second":20,

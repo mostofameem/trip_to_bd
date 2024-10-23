@@ -10,6 +10,7 @@ import (
 )
 
 type LocationReq struct {
+	Id           int    `json:"id" validate:"required"`
 	Title        string `json:"title" validate:"required"`
 	Descriptions string `json:"content"`
 	BestTime     string `json:"best_time" validate:"required"`
@@ -36,7 +37,8 @@ func (handlers *Handlers) AddLocation(w http.ResponseWriter, r *http.Request) {
 		Descriptions: locationReq.Descriptions,
 		BestTime:     locationReq.BestTime,
 		PictureUrl:   locationReq.PictureUrl,
-	})
+	},
+		locationReq.Id)
 	if err != nil {
 		slog.Error(err.Error())
 		utils.SendError(w, http.StatusInternalServerError, err)
